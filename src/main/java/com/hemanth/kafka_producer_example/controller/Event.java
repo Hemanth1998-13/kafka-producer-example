@@ -21,7 +21,7 @@ public class Event {
     @GetMapping("/publish/{message}")
     public ResponseEntity<?> sendMessageToKafkaServer(@PathVariable String message){
         try {
-            for (int i=0; i<=10000; i++)
+            for (int i=0; i<=100000; i++)
                 kafkaMessageProducer.sendMessageToKafka(message+":"+i);
         }catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
