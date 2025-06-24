@@ -15,7 +15,7 @@ public class KafkaMessageProducer {
 
     public void sendMessageToKafka(String message){
 
-        CompletableFuture<SendResult<String, Object>> quickstart = kafkaTemplate.send("topic1", message);
+        CompletableFuture<SendResult<String, Object>> quickstart = kafkaTemplate.send("topic-by-spring", message);
         quickstart.whenComplete((result,ex) ->
         {
             if(ex == null)
