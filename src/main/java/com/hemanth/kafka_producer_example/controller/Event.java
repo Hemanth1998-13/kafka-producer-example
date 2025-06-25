@@ -1,30 +1,29 @@
 package com.hemanth.kafka_producer_example.controller;
 
+import com.hemanth.kafka_producer_example.dto.Customer;
 import com.hemanth.kafka_producer_example.service.KafkaMessageProducer;
-import org.apache.kafka.clients.producer.KafkaProducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/producer")
 public class Event {
 
+    private static final Logger log = LoggerFactory.getLogger(Event.class);
     @Autowired
     private KafkaMessageProducer kafkaMessageProducer;
 
-    @GetMapping("/publish/{message}")
-    public ResponseEntity<?> sendMessageToKafkaServer(@PathVariable String message){
+    @PostMapping
+    public ResponseEntity<?> sendMessageToKafkaServer(@RequestBody Customer customer){
         try {
-            for (int i=0; i<=100000; i++)
-                kafkaMessageProducer.sendMessageToKafka(message+":"+i);
+                kafkaMessageProducer.sendMessageToKafka(customer);
+                log.info("Message published: "+customer.toString());
         }catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+                e.printStackTrace();
         }
         return  new ResponseEntity<>(HttpStatus.OK);
 
